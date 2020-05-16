@@ -37,14 +37,14 @@ class WeaselGenerator:
 
 
 if __name__ == '__main__':
-    from target import selector
+    from target import selector, TARGET_WIDTH
 
     wg = WeaselGenerator()
     generation = 0
     while True:
         generation += 1
         weasel, distance = selector([wg.weasel])
-        print(f'Gen {generation}: {weasel}    Distance: {distance}')
+        print(f'Gen {generation:3}: {weasel:{TARGET_WIDTH}}  Distance: {distance}')
         if distance == 0:
             break
         new_weasels = wg.generate_new_mutations()
