@@ -39,15 +39,13 @@ def test_change_character_at_end(weasel_generator):
     assert new_weasel[0:6] == 'Brando'
 
 
-def test_target_exact_match(weasel_generator):
+def test_target_exact_match():
     close_match = "Mythinks it is like a weasel."
     best_match = TARGET[:]
     assert selector([close_match, best_match]) == (TARGET, 0)
 
 
-def test_target_close_match(weasel_generator):
+def test_target_close_match():
     bad_match = "David Bowie was here."
     close_match = "Mythinks it is like a weasel."
     assert selector([bad_match, close_match]) == (close_match, 1)
-
-
