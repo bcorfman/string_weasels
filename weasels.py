@@ -3,7 +3,7 @@ import string
 
 INITIAL_TARGET_LENGTH = 7
 MAX_CHILDREN = 1000
-POSSIBLE_CHARS = string.whitespace + string.ascii_letters + string.punctuation
+POSSIBLE_CHARS = " " + string.ascii_letters + string.punctuation
 
 
 class WeaselGenerator:
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     while True:
         generation += 1
         weasel, distance = selector([wg.weasel])
-        print(f'Generation {generation}: {weasel}    Distance: {distance}')
+        print(f'Gen {generation}: {weasel}    Distance: {distance}')
         if distance == 0:
             break
         new_weasels = wg.generate_new_mutations()
