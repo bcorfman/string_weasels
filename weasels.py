@@ -1,5 +1,4 @@
 import random
-import sys
 import string
 
 INITIAL_TARGET_LENGTH = 7
@@ -15,39 +14,39 @@ class WeaselGenerator:
             self._weasel = initial
         self.choices = (self.add_character, self.delete_character, self.change_character)
 
-    def get_weasel(self):
+    @property
+    def weasel(self):
         return self._weasel
 
-    def set_weasel(self, weasel):
-        self._weasel = weasel
+    @weasel.setter
+    def weasel(self, value):
+        self._weasel = value
 
     def generate_new_mutations(self):
         idx = random.randint(0, len(self._weasel))
-        return (random.choice(self.choices)(idx) for i in range(MAX_CHILDREN))
+        return (random.choice(self.choices)(idx) for _ in range(MAX_CHILDREN))
 
     def add_character(self, idx):
-        new_char = random.choice(POSSIBLE_CHARS)
-        return self._weasel[0:idx] + new_char + self._weasel[idx:len(self._weasel)]
+        return f'{self._weasel[0:idx]}{random.choice(POSSIBLE_CHARS)}{self._weasel[idx:len(self._weasel)]}'
 
     def delete_character(self, idx):
-        return self._weasel[0:idx] + self._weasel[idx+1:len(self._weasel)]
+        return f'{self._weasel[0:idx]}{self._weasel[idx + 1:len(self._weasel)]}'
 
     def change_character(self, idx):
-        new_char = random.choice(POSSIBLE_CHARS)
-        return self._weasel[0:idx] + new_char + self._weasel[idx+1:len(self._weasel)]
+        return f'{self._weasel[0:idx]}{random.choice(POSSIBLE_CHARS)}{self._weasel[idx + 1:len(self._weasel)]}'
 
 
 if __name__ == '__main__':
     from target import selector
-    w = WeaselGenerator()
+
+    wg = WeaselGenerator()
     generation = 0
-    distance = sys.maxsize
     while True:
         generation += 1
-        weasel, distance = selector([w.get_weasel()])
-        print('Generation {}: {}    Distance: {}'.format(generation, weasel, distance))
+        weasel, distance = selector([wg.weasel])
+        print(f'Generation {generation}: {weasel}    Distance: {distance}')
         if distance == 0:
             break
-        new_weasels = w.generate_new_mutations()
-        selected_weasel, distance = selector(new_weasels)
-        w.set_weasel(selected_weasel)
+        new_weasels = wg.generate_new_mutations()
+        selected_weasel, _ = selector(new_weasels)
+        wg.weasel = selected_weasel
