@@ -10,4 +10,4 @@ To run, you'll need to
 2) Clone this repo, then type 'pip install -r requirements.txt' from a command prompt inside the project folder to install the needed dependencies.
 3) Also at the command prompt, type 'python weasels.py' to run the code and find the target string. 
 
-On average, it takes 150 generations starting with a seven-character line of gibberish to generate the line from Hamlet: "Methinks it looks like a weasel."
+On average, my program takes 150 generations starting with a seven-character line of gibberish to generate the line from Hamlet: "Methinks it looks like a weasel." Dudley's program does it faster (30-60 generations), but I don't have his code to see why it makes quicker progress than mine.
