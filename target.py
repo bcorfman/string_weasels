@@ -2,7 +2,7 @@ import sys
 
 from Levenshtein import distance
 
-TARGET = "Methinks it looks like a weasel."
+TARGET = "Methinks it is like a weasel."
 PADDING = 2
 TARGET_WIDTH = len(TARGET) + PADDING
 
