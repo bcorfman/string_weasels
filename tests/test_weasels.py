@@ -1,6 +1,7 @@
 import pytest
+
+from target import TARGET, selector
 from weasels import WeaselGenerator
-from target import selector, TARGET
 
 
 @pytest.fixture(scope='module')
