@@ -5,7 +5,6 @@
 	"image": "mcr.microsoft.com/devcontainers/python:3.11",
 	"features": {
 		"ghcr.io/devcontainers/features/git:1": {},
-		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers-contrib/features/yapf:1": {},
 		"ghcr.io/devcontainers-contrib/features/isort:1": {},
 		"ghcr.io/devcontainers-contrib/features/poetry:1": {},
