@@ -15,13 +15,15 @@ To run, you'll need to either
 OR
 
 1) Install [Python](https://www.python.org) 3.9 or higher.
-2) Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
-3) Clone this repo, then type `uv sync --dev` from a command prompt inside the project folder to install the needed dependencies.
-4) Also at the command prompt, type `uv run python weasels.py` to run the code and find the target string.
+2) Clone this repo.
+3) Run `make devinstall` from the project folder to install development dependencies.
+4) Run `make run` to execute the program and find the target string.
 
 To run tests:
 
-1) Install dependencies with `uv sync --dev`.
-2) Run `uv run pytest`.
+1) Install dependencies with `make devinstall`.
+2) Run `make test`.
+
+For non-development installs, run `make install`.
 
 On average, my program takes 150 generations starting with a seven-character line of gibberish to generate the line from Hamlet: "Methinks it is like a weasel." Dudley's program does it faster (30-60 generations), but I don't have his code to see why it makes quicker progress than mine.
