@@ -23,3 +23,6 @@ testpaths = ["tests"]
 filterwarnings = [
     "ignore::DeprecationWarning",
 ]
+markers = [
+    "performance: deterministic performance regression checks",
+]

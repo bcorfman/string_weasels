@@ -1,13 +1,21 @@
 import random
 import string
+from itertools import chain
 
 MAX_CHILDREN = 1000
-MAX_MUTATIONS_PER_CHILD = 3
+MUTATION_RATE = 0.05
 POSSIBLE_CHARS = " " + string.ascii_letters + string.punctuation
 
 
 class WeaselGenerator:
-    def __init__(self, initial=None, initial_length=None, max_children=MAX_CHILDREN, max_mutations_per_child=MAX_MUTATIONS_PER_CHILD):
+    def __init__(
+        self,
+        initial=None,
+        initial_length=None,
+        max_children=MAX_CHILDREN,
+        mutation_rate=MUTATION_RATE,
+        substitution_only=True,
+    ):
         if initial is None:
             if initial_length is None:
                 from target import TARGET
@@ -16,7 +24,8 @@ class WeaselGenerator:
         else:
             self._weasel = initial
         self.max_children = max_children
-        self.max_mutations_per_child = max_mutations_per_child
+        self.mutation_rate = mutation_rate
+        self.substitution_only = substitution_only
         self.choices = (self.add_character, self.delete_character, self.change_character)
 
     @property
@@ -33,7 +42,7 @@ class WeaselGenerator:
 
     def _mutate_child(self, parent):
         child = parent
-        mutation_count = random.randint(1, self.max_mutations_per_child)
+        mutation_count = sum(1 for _ in range(len(parent)) if random.random() < self.mutation_rate)
         for _ in range(mutation_count):
             child = self._mutate_once(child)
         return child
@@ -41,9 +50,12 @@ class WeaselGenerator:
     def _mutate_once(self, source):
         if not source:
             return self.add_character(0, source)
-        operation = random.choice(self.choices)
-        max_idx = len(source) if operation is self.add_character else len(source) - 1
-        return operation(random.randint(0, max_idx), source)
+        operation = self.change_character if self.substitution_only else random.choice(self.choices)
+        if operation.__name__ == "add_character":
+            idx = random.randint(0, len(source))
+        else:
+            idx = random.randint(0, len(source) - 1)
+        return operation(idx, source)
 
     def add_character(self, idx, source=None):
         source = self._weasel if source is None else source
@@ -69,6 +81,6 @@ if __name__ == '__main__':
         print(f'Gen {generation:3}: {weasel:{TARGET_WIDTH}}  Distance: {distance}')
         if distance == 0:
             break
-        new_weasels = wg.generate_new_mutations()
+        new_weasels = chain((wg.weasel,), wg.generate_new_mutations())
         selected_weasel, _ = selector(new_weasels)
         wg.weasel = selected_weasel

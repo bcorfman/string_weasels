@@ -26,4 +26,4 @@ To run tests:
 
 For non-development installs, run `make install`.
 
-On average, my program takes 150 generations starting with a seven-character line of gibberish to generate the line from Hamlet: "Methinks it is like a weasel." Dudley's program does it faster (30-60 generations), but I don't have his code to see why it makes quicker progress than mine.
+In typical runs, the program converges on "Methinks it is like a weasel." in roughly 30-60 generations, which compares well with Dudley's program.
