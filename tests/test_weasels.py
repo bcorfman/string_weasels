@@ -1,6 +1,6 @@
 import pytest
 
-from target import TARGET, selector
+from target import TARGET, mismatch_score, selector
 from weasels import WeaselGenerator
 
 
@@ -49,7 +49,9 @@ def test_target_exact_match():
 def test_target_close_match():
     bad_match = "David Bowie was here."
     close_match = "Mythinks it is like a weasel."
-    assert selector([bad_match, close_match]) == (close_match, 1)
+    selected, score = selector([bad_match, close_match])
+    assert selected == close_match
+    assert score == mismatch_score(close_match)
 
 
 def test_initial_length_matches_target_by_default():
@@ -58,12 +60,16 @@ def test_initial_length_matches_target_by_default():
 
 
 def test_generate_new_mutations_uses_random_index_per_child(monkeypatch):
-    generator = WeaselGenerator("abcd", max_children=2, max_mutations_per_child=1)
+    generator = WeaselGenerator("abcd", max_children=2, mutation_rate=0.5, substitution_only=False)
 
-    randint_values = iter([1, 0, 1, 2])
+    randint_values = iter([0, 2])
+    random_values = iter([0.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.1, 0.9])
 
     def fake_randint(_min, _max):
         return next(randint_values)
+
+    def fake_random():
+        return next(random_values)
 
     def fake_choice(options):
         if isinstance(options, tuple):
@@ -71,6 +77,7 @@ def test_generate_new_mutations_uses_random_index_per_child(monkeypatch):
         return "X"
 
     monkeypatch.setattr("weasels.random.randint", fake_randint)
+    monkeypatch.setattr("weasels.random.random", fake_random)
     monkeypatch.setattr("weasels.random.choice", fake_choice)
 
     assert list(generator.generate_new_mutations()) == ["Xbcd", "abXd"]
