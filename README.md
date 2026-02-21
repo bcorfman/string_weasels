@@ -15,8 +15,8 @@ To run, you'll need to either
 OR
 
 1) Install [Python](https://www.python.org) 3.7 or higher.
-2) Install  [Poetry](https://python-poetry.org).
-3) Clone this repo, then type `poetry install` from a command prompt inside the project folder to install the needed dependencies.
-4) Also at the command prompt, type `python weasels.py` to run the code and find the target string.
+2) Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
+3) Clone this repo, then type `uv sync --dev` from a command prompt inside the project folder to install the needed dependencies.
+4) Also at the command prompt, type `uv run python weasels.py` to run the code and find the target string.
 
 On average, my program takes 150 generations starting with a seven-character line of gibberish to generate the line from Hamlet: "Methinks it is like a weasel." Dudley's program does it faster (30-60 generations), but I don't have his code to see why it makes quicker progress than mine.

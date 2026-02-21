@@ -7,7 +7,6 @@
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/devcontainers-contrib/features/yapf:1": {},
 		"ghcr.io/devcontainers-contrib/features/isort:1": {},
-		"ghcr.io/devcontainers-contrib/features/poetry:1": {},
 		"ghcr.io/devcontainers-contrib/features/flake8:1": {}
 	},
 	"postCreateCommand": "bash ./.devcontainer/post-install.sh"
