@@ -1,4 +1,9 @@
 #!/bin/bash
-poetry config virtualenvs.in-project true
-poetry config virtualenvs.prefer-active-python true 
-poetry install
+set -euo pipefail
+
+if ! command -v uv >/dev/null 2>&1; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+uv sync --dev
