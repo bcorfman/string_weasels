@@ -1,17 +1,22 @@
 import random
 import string
 
-INITIAL_TARGET_LENGTH = 7
 MAX_CHILDREN = 1000
+MAX_MUTATIONS_PER_CHILD = 3
 POSSIBLE_CHARS = " " + string.ascii_letters + string.punctuation
 
 
 class WeaselGenerator:
-    def __init__(self, initial=None):
+    def __init__(self, initial=None, initial_length=None, max_children=MAX_CHILDREN, max_mutations_per_child=MAX_MUTATIONS_PER_CHILD):
         if initial is None:
-            self._weasel = ''.join([random.choice(POSSIBLE_CHARS) for _ in range(INITIAL_TARGET_LENGTH)])
+            if initial_length is None:
+                from target import TARGET
+                initial_length = len(TARGET)
+            self._weasel = ''.join(random.choice(POSSIBLE_CHARS) for _ in range(initial_length))
         else:
             self._weasel = initial
+        self.max_children = max_children
+        self.max_mutations_per_child = max_mutations_per_child
         self.choices = (self.add_character, self.delete_character, self.change_character)
 
     @property
@@ -23,17 +28,34 @@ class WeaselGenerator:
         self._weasel = value
 
     def generate_new_mutations(self):
-        idx = random.randint(0, len(self._weasel))
-        return (random.choice(self.choices)(idx) for _ in range(MAX_CHILDREN))
+        parent = self._weasel
+        return (self._mutate_child(parent) for _ in range(self.max_children))
 
-    def add_character(self, idx):
-        return f'{self._weasel[0:idx]}{random.choice(POSSIBLE_CHARS)}{self._weasel[idx:len(self._weasel)]}'
+    def _mutate_child(self, parent):
+        child = parent
+        mutation_count = random.randint(1, self.max_mutations_per_child)
+        for _ in range(mutation_count):
+            child = self._mutate_once(child)
+        return child
 
-    def delete_character(self, idx):
-        return f'{self._weasel[0:idx]}{self._weasel[idx + 1:len(self._weasel)]}'
+    def _mutate_once(self, source):
+        if not source:
+            return self.add_character(0, source)
+        operation = random.choice(self.choices)
+        max_idx = len(source) if operation is self.add_character else len(source) - 1
+        return operation(random.randint(0, max_idx), source)
 
-    def change_character(self, idx):
-        return f'{self._weasel[0:idx]}{random.choice(POSSIBLE_CHARS)}{self._weasel[idx + 1:len(self._weasel)]}'
+    def add_character(self, idx, source=None):
+        source = self._weasel if source is None else source
+        return f'{source[:idx]}{random.choice(POSSIBLE_CHARS)}{source[idx:]}'
+
+    def delete_character(self, idx, source=None):
+        source = self._weasel if source is None else source
+        return f'{source[:idx]}{source[idx + 1:]}'
+
+    def change_character(self, idx, source=None):
+        source = self._weasel if source is None else source
+        return f'{source[:idx]}{random.choice(POSSIBLE_CHARS)}{source[idx + 1:]}'
 
 
 if __name__ == '__main__':
